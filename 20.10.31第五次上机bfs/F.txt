@@ -1,0 +1,83 @@
+#include <iostream>
+#include <queue>
+#include <string.h>
+#include <string>
+using namespace std;
+
+int step[8]={0,-1,1,0,0,1,-1,0};
+
+int main()
+{
+
+	int T,n;
+	cin>>T;
+	while(T--)
+	{
+		//动态的二维数组
+		cin>>n;
+		int **Map =new int*[n];
+		for(int i=0;i<n;i++)
+		{
+			Map[i]=new int[n];
+		}
+		for(int i=0;i<n;i++)
+			for(int j=0;j<n;j++)
+				Map[i][j]=0;
+
+		queue <int> qx;
+		queue <int> qy;
+		queue <int> qs;
+		queue <int> qox;
+		queue <int> qoy;
+		for(int i=0;i<2*n-2;i++)
+		{
+			int ox,oy;
+			cin>>ox>>oy;
+			qox.push(ox-1);qoy.push(oy-1);
+		}
+		qx.push(0);qy.push(0);qs.push(0);
+		int x,y,s=0;
+		int first=0;
+		bool isYes=0;
+		int o=0;
+		while(!qx.empty())
+		{
+			int olds=s;
+			x=qx.front();y=qy.front();s=qs.front();
+			qx.pop();qy.pop();qs.pop();
+			Map[y][x]=1;
+			
+			if(first&&olds!=s)//第一次不放路障,步数有变
+			{
+				int tempx=qox.front(),tempy=qoy.front();
+				qox.pop();qoy.pop();
+				Map[tempx][tempy]=1;
+				o++;
+			}
+			first++;
+			if(y==n-1&&x==n-1)//胜利条件
+			{
+				isYes=1;
+				break;
+			}
+			for(int k=0;k<8;k=k+2)//上下左右放队列
+			{
+				int newx=x+step[k];
+				int newy=y+step[k+1];//bug
+				if(newx<0||newy<0||newx>=n||newy>=n)continue;
+				if(Map[newy][newx])continue;
+				qx.push(newx);qy.push(newy);qs.push(s+1);
+			}
+		}
+		if(isYes)cout<<"Yes"<<endl;
+		else cout<<"No"<<endl;
+		//清空Map
+		for(int i=0;i<n;i++)
+			free(Map[i]);
+		free(Map);
+
+    }
+	system("pause");
+	//cout<<"Hello world!"<<endl;
+	return 0;
+}

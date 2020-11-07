@@ -1,0 +1,69 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+typedef struct treenode{
+	char leaf;
+	struct treenode* lchild;
+	struct treenode* rchild;
+}Tree;
+
+void buildATree(Tree* &T,const char* preord,const char* inord,int len)
+{
+	
+	if(len==0)
+	{
+		T=NULL;
+	}
+	else
+	{
+		int i=0;
+		while(preord[0]!=inord[i])
+		{
+			i++;
+		}
+		 T=(Tree * )malloc(sizeof(struct treenode));
+		
+		T->leaf=preord[0];
+		buildATree(T->lchild,preord+1,inord,i);
+		buildATree(T->rchild,preord+i+1,inord+i+1,len-i-1);
+	}
+}
+
+void PostordVisit(Tree* T)
+{
+	if(T!=NULL)
+	{
+		PostordVisit(T->lchild);
+		PostordVisit(T->rchild);
+		cout<<T->leaf;
+
+	}
+}
+
+
+int main()
+{
+	int len;
+	string pre,ino;
+	const char* preord,* inord;
+	while(cin>>pre>>ino)//就用这种方式判断EOF！！！
+	{
+		
+		
+		preord=pre.c_str();
+		inord=ino.c_str();
+		int i;
+		for(i=0;preord[i]!='\0';i++);//cout<<"长度"<<i<<endl;
+		len=i;
+		//len=preord.length();
+		Tree * t=NULL;
+		buildATree(t,preord,inord,len);
+		PostordVisit(t);
+		cout<<endl;
+		//cout<<len<<endl;
+	}
+
+	system("pause");
+	return 0;
+}

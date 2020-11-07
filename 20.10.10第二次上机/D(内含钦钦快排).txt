@@ -1,0 +1,103 @@
+#include <iostream>
+
+using namespace std;
+
+// void sortArr(int arr[],int len)//冒泡排序
+// {
+// 	for(int j=0;j<len;j++)
+// 		for(int i=0;i<len-1;i++)
+// 		{
+// 			if(arr[i+1]<arr[i])
+// 			{
+// 				int temp=arr[i];
+// 				arr[i]=arr[i+1];
+// 				arr[i+1]=temp;
+// 			}
+// 		}
+// }
+
+
+void sortArr(int arr[],int start,int end) //胡乱快排
+{
+	int l=start;
+	int r=end;
+	int mid=start;
+	if(l==r)return;//一个数
+	while(l!=r)
+	{
+		if(mid==l)//mid在左
+		{
+			if(arr[mid]<arr[r])
+			{
+				r--;
+				//continue;
+			}
+			else
+			{
+				int temp=arr[r];
+				arr[r]=arr[mid];
+				arr[mid]=temp;
+				mid=r;
+				l++;
+				//continue;
+			}
+		}
+		else//mid在右
+		{
+			if(arr[mid]>arr[l])
+			{
+				l++;
+			}
+			else
+			{
+				int temp=arr[l];
+				arr[l]=arr[mid];
+				arr[mid]=temp;
+				mid=l;
+				r--;
+			}
+		}
+		if(l==r)
+		{
+			if(mid-1>=start)sortArr(arr,start,mid-1);
+			if(mid+1<=end)sortArr(arr,mid+1,end);
+		}
+	}
+}
+
+int main()
+{
+// 	int T;
+// 	cin>>T;
+	int n;
+	while(cin>>n)
+	{
+		int *Arr = new int[n];
+		for(int i=0;i<n;i++)
+		{
+			cin>>Arr[i];
+		}
+		sortArr(Arr,0,n-1);
+
+// 		cout<<"测试用："<<endl;
+// 		for(int i=0;i<n;i++)
+// 		{
+// 			cout<<Arr[i]<<" ";
+// 			
+// 		}
+// 		cout<<endl;
+
+
+		int count=0;
+		for(int i=0;i<n-2;i++)
+			for(int j=i+1;j<n-1;j++)
+				for(int k=j+1;k<n;k++)
+				{
+					if(Arr[i]+Arr[j]>Arr[k])count++;
+					else break;
+				}
+		cout<<count<<endl;
+	}
+	system("pause");//记得删
+	return 0;
+}

@@ -1,0 +1,56 @@
+#include <iostream>
+#include <queue>
+#include <string.h>
+#include <string>
+using namespace std;
+
+int K[200]={};
+
+int Less=0;
+
+int visited[200]={};
+
+
+int main()
+{
+	
+	int N,A,B;
+	cin>>N>>A>>B;
+
+	for(int i=A-1;i<=B-1;i++)
+		cin>>K[i];//K输入
+
+		queue <int> L;
+		queue <int> times;
+		L.push(A-1);times.push(0);
+		int l,t;
+		bool isArrived =false;
+		while(!L.empty())
+		{
+			l=L.front();t=times.front();
+			L.pop();times.pop();
+			
+			if(l==B-1)//到达
+			{
+				cout<<t<<endl;
+				isArrived=true;
+				break;
+			}
+			int nl;
+			for(int k=0;k<=1;k++)//上下放队列
+			{
+				if(!k)nl=l+K[l];
+				else nl=l-K[l];
+
+				if(visited[nl]||nl<A-1||nl>B-1)continue;
+				//到达楼层
+				visited[nl]=1;
+				L.push(nl);times.push(t+1);
+			}
+
+		}
+		if(!isArrived)cout<<-1<<endl;
+	system("pause");
+	//cout<<"Hello world!"<<endl;
+	return 0;
+}

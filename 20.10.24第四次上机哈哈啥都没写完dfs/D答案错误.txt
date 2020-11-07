@@ -1,0 +1,121 @@
+#include<stdio.h>
+#include<string.h>
+#include<algorithm>
+#include<stack>
+#include <iostream>
+using namespace std;
+int map[5][5]={0};
+int vis[5][5]={0};
+int re=0;
+int count_step=0;
+int theLessStep=25;
+stack<int> path_x,path_y;
+stack<int> path_X,path_Y;
+void StoreTheBest()
+{
+	path_X=path_x;
+	path_Y=path_y;
+}
+
+void dfs(int px,int py)
+{
+	//if(re)return;
+	if(px==4&&py==4)
+	{
+		if(count_step<theLessStep)
+		{
+			theLessStep=count_step;
+			StoreTheBest();
+		}
+		return;
+	}
+
+	if(py<4&&map[px][py+1]==0&&vis[px][py+1]==0)//down
+	{
+		path_x.push(px);
+		path_y.push(py);
+		vis[px][py+1]=1;
+		count_step++;
+		dfs(px,py+1);
+		count_step--;
+	//	if(re)return;
+		vis[px][py+1]=0;
+		path_x.pop();
+		path_y.pop();
+	}
+	if(px<4&&map[px+1][py]==0&&vis[px+1][py]==0)//right
+	{
+		path_x.push(px);
+		path_y.push(py);
+		vis[px+1][py]=1;
+		count_step++;
+		dfs(px+1,py);
+		count_step--;
+		//if(re)return;
+		vis[px+1][py]=0;
+		path_x.pop();
+		path_y.pop();
+	}
+	if(px>4&&map[px-1][py]==0&&vis[px-1][py]==0)//left
+	{
+		path_x.push(px);
+		path_y.push(py);
+		vis[px-1][py]=1;
+		count_step++;
+		dfs(px-1,py);
+		count_step--;
+	//	if(re)return;
+		vis[px-1][py]=0;
+		path_x.pop();
+		path_y.pop();
+	}
+	if(py>0&&map[px][py-1]==0&&vis[px][py-1]==0)//up
+	{
+		path_x.push(px);
+		path_y.push(py);
+		vis[px][py-1]=1;
+		count_step++;
+		dfs(px,py-1);
+		count_step--;
+	//	if(re)return;
+		vis[px][py-1]=0;
+		path_x.pop();
+		path_y.pop();
+	}
+
+}
+
+int main()
+{
+	int temp;
+	for(int i=0;i<5;i++)
+		for(int j=0;j<5;j++)
+		{
+			cin>>temp;
+			if(temp==1)map[i][j]=1;
+		}
+
+	dfs(0,0);
+// 	if(re)
+// 	{
+		stack<int> outp_x;
+		stack<int> outp_y;
+		for(int i=0;!path_X.empty();i++)
+		{
+			outp_x.push(path_X.top());path_X.pop();
+			outp_y.push(path_Y.top());path_Y.pop();
+		}
+//		cout<<"(0,0)"<<endl;
+		for(int i=0;!outp_x.empty();i++)
+		{
+			cout<<"("<<outp_x.top()<<","<<outp_y.top()<<")"<<endl;
+			outp_x.pop();
+			outp_y.pop();
+		}
+		cout<<"(4,4)"<<endl;
+//	}
+
+
+	system("pause");
+	return 0;
+}

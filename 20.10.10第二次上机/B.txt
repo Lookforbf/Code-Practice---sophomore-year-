@@ -1,0 +1,39 @@
+#include <iostream>
+
+using namespace std;
+
+int cal(int N,int k)
+{
+	if(k==2)return ((N%10)*(N%10))%10;
+	if(k==3)return ((N%10)*(N%10)*(N%10))%10;
+	if(k%2==0)
+		{
+			int temp=cal(N,k/2)%10;
+			return (temp*temp)%10;
+		}
+	else 
+		{
+			int temp=cal(N,k/2)%10;
+			return (temp*temp*(N%10))%10;
+		}
+}
+
+
+int main()
+{
+	int T;
+	cin>>T;
+	while(T--)
+	{
+		int N;
+		cin>>N;
+		if(N==1)
+		{
+			cout<<1<<endl;
+			continue;
+		}
+		cout<< cal(N,N)%10<<endl;
+	}
+	system("pause");
+	return 0;
+}

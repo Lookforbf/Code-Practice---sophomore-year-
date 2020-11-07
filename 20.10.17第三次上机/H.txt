@@ -1,0 +1,53 @@
+#include <iostream>
+#include <string>
+//#include <iomanip>
+using namespace std;
+
+string Brownswer[2001];
+
+int main()
+{
+	//char ch;
+	int p=0;
+	int past=0;
+	string temp,web;
+	Brownswer[0]="http://www.acm.org/";
+	while(cin>>temp)
+	{
+		
+		//ch=cin.peek();
+		if(temp=="QUIT")break;
+		if(temp=="VISIT")
+		{
+			p++;
+			cin>>Brownswer[p];
+			cout<<Brownswer[p]<<endl;
+			
+			past=p;
+		}
+		else if(temp=="BACK")
+		{
+			if(p==0)cout<<"Ignored"<<endl;
+			else
+			{
+				//past=p;
+				p--;
+				cout<<Brownswer[p]<<endl;
+			}
+		}
+		else if(temp=="FORWARD")
+		{
+			if(past==p)cout<<"Ignored"<<endl;
+			else
+			{
+				p++;
+				cout<<Brownswer[p]<<endl;
+			}
+		}
+	}
+	
+	
+
+	system("pause");
+	return 0;
+}

@@ -1,0 +1,308 @@
+/*
+题目描述
+输入一行字符串，是包含+-*/合法运算的一行字符串，要求解析字符串的值。
+
+输入
+第一行包括一行整数T，表示样例个数。
+对于每一个样例，输入一行字符串代表合法运算。
+
+输出
+对于每一个样例，输出一个数字表示结果。结果误差要求小于1e-4。
+
+样例输入 
+2
+3/4+2
+2+3*4
+
+样例输出 
+2.75
+14
+*/
+////////ME法一
+#include <iostream>
+#include <string>
+using namespace std;
+
+typedef struct treenode{
+	char leaf;
+	double lval;
+	double rval;
+	double num;
+	struct treenode* lchild;
+	struct treenode* rchild;
+}Tree;
+
+void buildATree(
+	Tree* T,//tree
+	const char* f,
+	int s,//start
+	int e,//end
+	bool stop)//stop if end
+{
+	if(stop)
+	{
+		T=NULL;
+	}
+	else
+	{
+		T = (Tree* )malloc(sizeof(struct treenode));
+		T->lchild=NULL;
+		T->rchild=NULL;
+		char temp;
+		int i;
+		bool isFoundOp=false;
+		while(!isFoundOp)
+		{
+			for( i=s;i<=e;i++)
+			{
+				temp=f[i];
+				if(temp=='+'||temp=='-')
+				{
+					T->leaf=temp;
+					isFoundOp=true;
+					break;
+				}
+			}
+			if(isFoundOp)break;
+			for( i=s;i<e;i++)
+			{
+				temp=f[i];
+				if(temp=='*'||temp=='/')
+				{
+					T->leaf=temp;
+					isFoundOp=true;
+					break;
+				}
+			}
+		}//end while
+		if(isFoundOp)
+		{
+			buildATree(T->lchild,f,s,i-1,false);
+			buildATree(T->rchild,f,i+1,e,false);
+		}
+		else
+		{
+			int j=1;
+			int N=0;
+			while(e!=s)
+			{
+				N+=(f[e]-48)*j;
+				s--;
+				j*=10;
+			}
+			N+=(f[e]-48)*j;//最后一招
+
+			T->num=(double)N;
+			T->lval=0;T->rval=0;
+			buildATree(T->lchild,f,0,0,true);
+			buildATree(T->rchild,f,0,0,true);//to be NULL
+		}
+		
+	}
+}
+
+void PostordVisit(Tree* T)
+{
+	if(T!=NULL)
+	{
+		PostordVisit(T->lchild);
+		PostordVisit(T->rchild);
+		cout<<T->leaf;
+
+	}
+}
+
+
+int main()
+{
+	int T;
+	string f;
+	const char* fun;
+	cin>>T;
+	while(T--)
+	{
+		cin>>f;
+		fun = f.c_str();
+		int i;
+		for(i=0;fun[i]!='\0';i++);
+		Tree t;
+		buildATree(&t,fun,0,i-1,false);
+
+	
+	}
+
+	system("pause");
+	return 0;
+}
+////////////////////////////////////////////////////ME法2
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+
+double Anum();
+double ATerm();
+
+double AnExpression()
+{
+	double result=ATerm();
+	char ch;
+	ch=cin.peek();
+
+	while(ch=='+'||ch=='-')
+	{
+		cin.get();
+		double v =ATerm();
+		if(ch=='+') result+=v;
+		else result -=v;
+		ch=cin.peek();
+	}
+	return result;
+}
+
+double ATerm()
+{
+	double result=Anum();
+	char ch;
+	ch=cin.peek();
+	
+	while(ch=='*'||ch=='/')
+	{
+		cin.get();
+		double v=Anum();
+		if(ch=='*')result*=v;
+		else result/=v;
+
+		ch=cin.peek();
+	}
+	return result;
+}
+
+double Anum()
+{
+	int result=0;
+	char ch;
+	ch=cin.peek();
+	while(isdigit(ch))
+	{
+		result=result*10+ch-'0';
+		cin.get();
+		ch=cin.peek();
+	}
+	return result;
+}
+
+
+int main()
+{
+	int T;
+	//string f;
+	//const char* fun;
+	cin>>T;
+	while(T--)
+	{
+		//cin>>f;
+		cin.sync();
+		
+		int result2=AnExpression()*10000;
+		double result=result2/10000.0;
+		cout<<result<<endl;
+		//printf("%f\n",result);
+	
+	}
+
+	system("pause");
+	return 0;
+}
+
+
+///////////////////////////////////附正确答案
+#include <iostream>
+#include <stack>
+#include <cmath>
+using namespace std;
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        string a;
+        cin>>a;
+        stack <char> oper;
+        stack <double> num;
+        int bit=0;
+        int temp[100]={0};
+        for(int i=0;i<a.length();i++){
+            if(a[i]-'0'>0&&a[i]-'0'<9){
+                temp[bit]=a[i]-'0';
+                bit++;
+            }
+            else{
+                int n=0;
+                int j=0;
+                while(bit>=0){
+                    n+=temp[j]*pow(10,bit-1);
+                    bit--;
+                    j++;
+                }
+                bit=0;
+                temp[100]={0};
+                num.push(n);
+                if((a[i]=='+'||a[i]=='-')&&!oper.empty()){
+                    double tem_num;
+                    double num1,num2;
+                    num2=num.top();
+                    num.pop();
+                    num1=num.top();
+                    num.pop();
+                    switch(oper.top()){
+                        case '+' :  tem_num=num1+num2;break;
+                        case '-' :  tem_num=num1-num2;break;
+                        case '*' :  tem_num=num1*num2;break;
+                        case '/' :  tem_num=num1/num2;break;
+                        default:break;
+                    }
+
+                    oper.pop();
+                    num.push(tem_num);
+                    oper.push(a[i]);
+                }
+                else if(a[i]=='*'||a[i]=='/'||a[i]=='+'||a[i]=='-'){
+                    oper.push(a[i]);
+                }
+            }
+        }
+
+        int n=0;
+        int j=0;
+        while(bit>=0){
+            n+=temp[bit]*pow(10,j);
+            bit--;
+        }
+        bit=0;
+        temp[100]={0};
+        num.push(n);
+
+
+        while(!oper.empty()){
+            double tem_num;
+            double num1,num2;
+            num2=num.top();
+            num.pop();
+            num1=num.top();
+            num.pop();
+            switch(oper.top()){
+                case '+' :  tem_num=num1+num2;break;
+                case '-' :  tem_num=num1-num2;break;
+                case '*' :  tem_num=num1*num2;break;
+                case '/' :  tem_num=num1/num2;break;
+                default:break;
+            }
+            oper.pop();
+            num.push(tem_num);
+        }
+        cout<<num.top()<<endl;
+    }
+    return 0;
+}

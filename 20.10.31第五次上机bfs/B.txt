@@ -1,0 +1,62 @@
+#include <iostream>
+#include <queue>
+#include <string.h>
+#include <string>
+using namespace std;
+
+string Stringsl[400];
+int visited[400][400]={};
+int COUNT;
+
+int step[8]={0,-1,1,0,0,1,-1,0};
+
+int main()
+{
+	
+	int n,m;
+	cin>>n>>m;
+
+	for(int i=0;i<n;i++)
+		cin>>Stringsl[i];
+
+	char cell;
+	for(int i=0;i<n;i++)//y
+	{
+		for(int j=0;j<m;j++)//x
+		{
+			cell=Stringsl[i][j];
+			if(visited[i][j]||cell=='0')continue;//横纵坐标！
+
+			COUNT++;
+			//bfs
+			
+			char cell1;
+			queue <int> qx;
+			queue <int> qy;
+			qx.push(j);qy.push(i);
+			int x,y;
+			while(!qx.empty())//用来置visited
+			{
+				x=qx.front();y=qy.front();
+				qx.pop();qy.pop();
+				visited[y][x]=1;
+				
+				for(int k=0;k<8;k=k+2)//上下左右放队列
+				{
+					int newx=x+step[k];
+					int newy=y+step[k+1];//bug
+					if(visited[newy][newx]||newx<0||newy<0||newx>=m||newy>=n)continue;
+					cell1=Stringsl[newy][newx];//极易错误！！！！
+					if(cell1=='0')continue;
+					qx.push(newx);qy.push(newy);
+				}
+			}
+		}
+	}
+
+	cout<<COUNT<<endl;
+
+	system("pause");
+	//cout<<"Hello world!"<<endl;
+	return 0;
+}

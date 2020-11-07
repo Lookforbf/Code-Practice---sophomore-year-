@@ -1,0 +1,118 @@
+#include<stack>
+#include <iostream>
+using namespace std;
+//#define ABS(x) ((x)>=0?(x):-(x))
+int yes=0;
+int re=0;
+void dfs(int s,int k,int n)
+{
+	if(n==k)
+	{
+		yes=1;
+		re=1;
+	}
+	if(s==0)return;
+	if(re)return;
+	
+	else
+	{
+		if(2*n<=100000&&n<k)dfs(s-1,k,2*n);
+		if(re)return;
+
+		if(n-1>0)dfs(s-1,k,n-1);
+		if(re)return;
+
+		if(n+1<=100000)dfs(s-1,k,n+1);
+		if(re)return;
+
+	}
+
+
+
+}
+
+int main()
+{
+	int n,k;
+	while(cin>>n>>k)
+	{
+		yes=0;
+		re=0;
+		int step;
+		int Abs= (n-k)>0?(n-k):(k-n);
+		for(step=1;step<=Abs;step++)
+		{
+			dfs(step,k,n);
+			re=0;
+			if(yes)break;
+		}
+		cout<<step<<endl;
+		//cout<<ABS(n-k)<<"abs"<<endl;
+	}
+//	system("pause");
+	return 0;
+}
+
+
+///////////////////////////////////////第二版，有点小bug继续改
+#include<stack>
+#include <iostream>
+using namespace std;
+//#define ABS(x) ((x)>=0?(x):-(x))
+int yes=0;
+int re=0;
+int step=0;
+void dfs(int k,int n)
+{
+	if(n==k)
+	{
+		yes=1;
+		re=1;
+		cout<<step<<endl;
+	}
+	//if(s==0)return;
+	if(re)return;
+	else
+	{
+		if(2*n<=100000&&n<k){
+			step++;
+			dfs(k,2*n);
+			step--;
+		}
+		if(re)return;
+		if(n+1<=100000&&n<k){step++;dfs(k,n+1);step--;}
+		if(re)return;
+		if(n-1>0){step++;dfs(k,n-1);step--;}
+		if(re)return;
+
+		
+
+	}
+
+
+
+}
+
+int main()
+{
+	int n,k;
+	while(cin>>n>>k)
+	{
+		yes=0;
+		re=0;
+//		int step;
+// 		int Abs= (n-k)>0?(n-k):(k-n);
+// 		for(step=1;step<=Abs;step++)
+// 		{
+// 			dfs(step,k,n);
+// 			re=0;
+// 			if(yes)break;
+// 		}
+		dfs(k,n);
+//		cout<<step<<endl;
+		step=0;
+		//cout<<ABS(n-k)<<"abs"<<endl;
+	}
+//	system("pause");
+	return 0;
+}

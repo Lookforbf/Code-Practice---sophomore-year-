@@ -1,0 +1,82 @@
+#include <iostream>
+
+using namespace std;
+
+typedef struct node{
+	int val;
+	struct node* next;
+}Node;
+
+
+int main()
+{
+	int T,m,n;
+	cin>>T;
+	while(T--)
+	{
+		Node* start;
+		start=(Node *)malloc(sizeof(struct node));
+		start->next=NULL;
+		Node* last=start;
+		//p=new Node[1000];
+		cin>>m>>n;
+		int temp;
+		for(int i=0;i<m;i++)
+		{
+			 cin>>temp;
+			 Node* p=(Node *)malloc(sizeof(struct node));
+			 p->val=temp;
+			 p->next=NULL;
+			 last->next=p;
+			 last=last->next;
+		}
+		Node* work=start;
+		for(int i=0;i<n;i++)
+		{
+			cin>>temp;
+			while((work->next!=NULL)&&( temp >  work->next->val))
+			{
+				work=work->next;
+			}
+			if(work->next==NULL)
+			{
+				Node* p=(Node *)malloc(sizeof(struct node));
+				p->val=temp;
+				p->next=NULL;
+				last->next=p;
+				last=last->next;
+			}
+			else
+			{
+				Node* p=(Node *)malloc(sizeof(struct node));
+				p->val=temp;
+				p->next=work->next;
+				work->next=p;
+			}
+
+		}
+		//输出测试
+		work=start;
+		int haha=0;//stdout
+		while(work->next!=NULL)
+		{
+			if(haha)cout<<" ";
+			haha++;
+			cout<<work->next->val;
+			work=work->next;
+		}
+		cout<<endl;
+		//释放清除
+		Node* clear=start->next;
+		while(clear!=NULL)
+		{
+			free(start);
+			start=clear;
+			clear=clear->next;
+		}
+		free(start);
+	}
+	//cout<<"Hello world!"<<endl;
+	system("pause");
+	return 0;
+}

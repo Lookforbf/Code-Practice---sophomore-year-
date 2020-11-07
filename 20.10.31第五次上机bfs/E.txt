@@ -1,0 +1,144 @@
+#include <iostream>
+#include <queue>
+#include <string.h>
+#include <string>
+using namespace std;
+
+string Stringsl[1000];
+int visited[1000][1000]={};
+int COUNT;
+bool isBad=false;
+//int step[8]={0,-1,1,0,0,1,-1,0};
+
+int main()
+{
+
+	int R,C;
+	cin>>R>>C;
+
+	for(int i=0;i<R;i++)
+		cin>>Stringsl[i];
+
+	char cell;
+	for(int i=0;i<R;i++)//y
+	{
+		for(int j=0;j<C;j++)//x
+		{
+			cell=Stringsl[i][j];
+			if(visited[i][j]||cell=='.')continue;//横纵坐标！
+
+			COUNT++;
+
+			//uhh找到一艘
+			char cell1;
+
+			int x=j,y=i;
+			int w,h;
+			cell1=Stringsl[y][x];//又错在横纵坐标
+			for(w=x;w<C&&cell1=='#';w++)
+			{
+				if(w+1==C)
+				{
+					w++;
+					break;
+				}
+				cell1=Stringsl[y][w+1];
+			}//长方形的长
+			w--;
+
+			cell1=Stringsl[y][x];
+			for(h=y;h<R&&cell1=='#';h++)
+			{
+				if(h+1==R)
+				{
+					h++;
+					break;
+				}
+				cell1=Stringsl[h+1][x];
+			}//宽
+			h--;
+			//验证船
+			int l,k;
+			for(k=y;k<=h;k++)
+			{
+				for(l=x;l<=w;l++)
+				{
+					cell1=Stringsl[k][l];
+					if(cell1=='#')
+					{
+						visited[k][l]=1;
+					}
+					else
+					{
+						isBad=true;
+						break;
+					}
+				}
+				if(isBad)break;	
+			}//end for 验证基本矩形船
+
+
+			//船的边缘检查
+			//左边缘检查
+			if(x!=0)
+			{
+				for(int lc=y;lc<=h;lc++)
+				{
+					cell1=Stringsl[lc][x-1];
+					if(cell1=='#')
+					{
+						isBad=1;
+						break;
+					}
+				}
+			}//end 左检
+			if (isBad)break;	
+
+			//右边缘检查
+			if(w+1!=C)
+			{
+				for(int lc=y;lc<=h;lc++)
+				{
+					cell1=Stringsl[lc][w+1];
+					if(cell1=='#')
+					{
+						isBad=1;
+						break;
+					}
+				}
+			}//end 右检
+			if (isBad)break;
+
+			//下边缘检查
+			if(h+1!=R)
+			{
+				for(int lc=x;lc<=w;lc++)
+				{
+					cell1=Stringsl[h+1][lc];
+					if(cell1=='#')
+					{
+						isBad=1;
+						break;
+					}
+				}
+			}//end 下检
+			if (isBad)break;
+
+
+
+		}//end for 找船头x
+		if (isBad)break;
+	}//end for 找船头y
+
+	if(isBad)
+	{
+		cout<<"Bad placement."<<endl;
+	}
+	else
+		cout<<"There are "<<COUNT<<" ships."<<endl;
+
+
+	system("pause");
+	//cout<<"Hello world!"<<endl;
+	return 0;
+}

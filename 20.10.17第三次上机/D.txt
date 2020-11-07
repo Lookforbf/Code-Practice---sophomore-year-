@@ -1,0 +1,88 @@
+#include <iostream>
+
+using namespace std;
+
+typedef struct node{
+	int val;
+	struct node* next;
+}Node;
+
+
+
+int main()
+{
+	int N,n,k;
+	cin>>N;
+	//int a=1;
+	for(int l=1;l<=N;l++)
+	{
+		
+		cin>>n>>k;
+		Node *start=(Node *)malloc(sizeof(Node));
+		start->val=0;
+		start->next=NULL;
+		Node * last=start;
+		for(int i=1;i<=n;i++)//建造链表
+		{
+			Node *p=(Node *)malloc(sizeof(Node));
+			p->val=i;
+			p->next=NULL;//先不接起来
+			last->next=p;
+			last=last->next;
+			start->val++;
+		}
+		last->next=start->next;//已连接
+
+
+ 		Node* work=start;
+		int count=1;
+
+		if(k==1){
+			cout<<"Case "<<l<<": "<<n<<endl;
+			continue;
+		}
+		//int haha=1;
+		while(k!=1&&start->val>1)//k!=1
+		{
+			if(count%k==0)//删除节点
+			{
+				Node *temp;
+				temp=work->next;
+				if(temp==start->next)
+				{
+					last->next=temp->next;
+					start->next=temp->next;
+					work=start->next;
+					free(temp);
+					start->val--;
+				}
+				else if(temp==last)
+				{
+					last=work;
+					last->next=start->next;
+					work=start->next;
+					free(temp);
+					start->val--;
+				}
+				else
+				{
+					work->next=work->next->next;
+					work=work->next;
+					free(temp);
+					start->val--;
+				}
+				count+=2;
+				continue;
+			}
+			work=work->next;
+			count++;
+		}
+		//if(haha)
+			cout<<"Case "<<l<<": "<<start->next->val<<endl;		
+
+		free(start);
+	}
+
+	system("pause");
+	return 0;
+}

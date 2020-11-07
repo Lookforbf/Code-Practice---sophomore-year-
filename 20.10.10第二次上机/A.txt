@@ -1,0 +1,41 @@
+#include <iostream>
+
+using namespace std;
+
+int value[7]={100,50,20,10,5,2,1};
+
+int main()
+{
+	int T;
+	cin>>T;
+	int num[7];
+	while(T--)
+	{
+		int now;
+		cin>>now;
+		int count=0;
+		for(int i=6;i>=0;i--)
+		{
+			cin>>num[i];
+		}
+		for(int i=0;i<7;i++)
+		{
+			if(now/value[i]<=num[i])
+			{
+				count+=now/value[i];
+				now-=(now/value[i])*value[i];
+			}
+			else
+			{
+				count+=num[i];
+				now=now-num[i]*value[i];
+			}
+			
+		}
+		if(now==0)cout<<count<<endl;
+		else cout<<-1<<endl;
+	}
+	//cout<<"Hello world!"<<endl;
+	system("pause");//记得删
+	return 0;
+}

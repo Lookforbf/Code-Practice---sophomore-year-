@@ -1,0 +1,136 @@
+#include <iostream>
+
+using namespace std;
+
+typedef struct node{
+	int val;
+	int No;
+	struct node* next;
+}Node;
+
+
+int main()
+{
+	int N,n;
+	cin>>N;
+	while(N--)
+	{
+		//头节点
+		Node* start;
+		start=(Node *)malloc(sizeof(struct node));
+		start->next=NULL;
+		start->val=0;
+		Node* last=start;
+	
+		cin>>n;
+		//int temp;
+		//int Num=1;
+		for(int i=1;i<=n;i++)
+		{
+			start->val++;//人数
+			Node* p=(Node *)malloc(sizeof(struct node));
+			//p->val=temp;
+			p->next=NULL;
+			p->No=i;
+			last->next=p;
+			last=last->next;
+		}
+
+		int count = 1;
+		while(start->val >3){
+
+			//int count =0;
+			Node* work=start->next;
+			Node* temp;
+			//其实就是if else语句
+			while(count%2==1&&work!=NULL&&work->next!=NULL)//第一轮筛选//一至二
+			{
+				//delete work->next;
+				temp=work->next->next;
+				free(work->next);
+				work->next=temp;
+				start->val--;
+				work=work->next;
+			}
+			while(count%2==0&&work!=NULL&&work->next!=NULL)//第二轮筛选//一至三
+			{
+				//delete work->next;
+				work=work->next;//
+				if(work==NULL||work->next==NULL)break;
+
+				temp=work->next->next;
+				free(work->next);
+				work->next=temp;
+				
+				start->val--;
+				if(work->next==NULL)break;
+				work=work->next;
+			}
+			count++;
+		}
+
+
+		//输入
+// 		cin>>m>>n;
+// 	//	int temp;
+// 		for(int i=0;i<m;i++)
+// 		{
+// 			 cin>>temp;
+// 			 Node* p=(Node *)malloc(sizeof(struct node));
+// 			 p->val=temp;
+// 			 p->next=NULL;
+// 			 last->next=p;
+// 			 last=last->next;
+// 		}
+
+		//插入
+// 		Node* work=start;
+// 		for(int i=0;i<n;i++)
+// 		{
+// 			cin>>temp;
+// 			while((work->next!=NULL)&&( temp >  work->next->val))
+// 			{
+// 				work=work->next;
+// 			}
+// 			if(work->next==NULL)
+// 			{
+// 				Node* p=(Node *)malloc(sizeof(struct node));
+// 				p->val=temp;
+// 				p->next=NULL;
+// 				last->next=p;
+// 				last=last->next;
+// 			}
+// 			else
+// 			{
+// 				Node* p=(Node *)malloc(sizeof(struct node));
+// 				p->val=temp;
+// 				p->next=work->next;
+// 				work->next=p;
+// 			}
+// 
+// 		}
+		//输出测试
+		Node* work=start;
+		int haha=0;//stdout
+		while(work->next!=NULL)
+		{
+			if(haha)cout<<" ";
+			haha++;
+			cout<<work->next->No;
+			work=work->next;
+		}
+		cout<<endl;
+		//释放清除
+// 		Node* clear=start->next;
+// 		while(clear!=NULL)
+// 		{
+// 			free(start);
+// 			start=clear;
+// 			clear=clear->next;
+// 		}
+// 		free(start);
+	}
+	//cout<<"Hello world!"<<endl;
+	system("pause");
+	return 0;
+}

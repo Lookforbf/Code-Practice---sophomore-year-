@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int Findif(int arr[],int lim,int m,int n)
+{
+	int aGroup=0;
+	int groupNum=0;//这
+	for(int i=0;i<n;i++)
+	{
+		aGroup+=arr[i];
+		if(aGroup>lim)
+		{
+			groupNum++;
+			aGroup=0;
+			i--;
+		}
+	}
+	return (groupNum+1<=m);
+// 	for(int i=0;i<n;i++)
+// 	{
+// 		if(aGroup+arr[i]>lim)
+// 		{
+// 			groupNum++;
+// 			aGroup=0;
+// 			continue;
+// 		}
+// 		aGroup+=arr[i];
+// 	}
+// 	return ((groupNum+1)<=m);
+}
+
+int main()
+{
+	int n,m;
+	while(cin>>n>>m)
+	{
+		int *a=new int[n];
+		int sum=0;
+		int max=0;
+		int temp;
+		for(int i=0;i<n;i++)
+		{
+			cin>>temp;
+			a[i]=temp;
+			sum+=temp;
+			if(temp>max)max=temp;
+		}
+		int l=max;
+		int h=sum;
+		int mid ;
+		mid= (l+h)/2;
+		while(l!=h)
+		{
+			if(Findif(a,mid,m,n))
+			{
+				h=mid;
+				mid=(h+l)/2;
+			}
+			else
+			{
+				l=mid+1;//这。。。。。。
+				mid=(l+h)/2;
+			}
+		}
+		cout<<mid<<endl;
+	}
+	system("pause");//记得删
+	return 0;
+}

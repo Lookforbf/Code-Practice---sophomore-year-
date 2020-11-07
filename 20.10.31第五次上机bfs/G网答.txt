@@ -1,0 +1,38 @@
+//////////////////////网络答案
+#include <iostream>
+
+using namespace std;
+
+double a[20];
+int h[20];
+long long ans = 0;
+double N;
+int T;
+void dfs(int pos, long long hp, double money) {
+	if (money > N)   return ;
+	if (hp > ans)    ans = hp;
+	if (pos >T)   return ;
+	dfs (pos+1, hp+h[pos], money+a[pos]);
+	dfs (pos+1, hp, money);
+}
+
+int main()
+{
+	int Tn;
+	cin >> Tn;
+
+	while (Tn--) {
+		ans =0;
+		cin >> N >> T;
+		for (int i =1; i<=T; i++) {
+			cin >> a[i];
+			a[i] *=0.9;
+		}
+		for (int i =1; i<=T; i++) {
+			cin >> h[i];
+		}
+		dfs(1, 0, 0);
+		cout << ans <<endl;
+	}
+	return 0;
+}
