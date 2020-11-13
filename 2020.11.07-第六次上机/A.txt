@@ -1,0 +1,55 @@
+#include <iostream>
+//#include <climits>
+using namespace std;
+const int INFI= 0x3f3f3f;
+int main()
+{
+	int N,M;
+
+	while(cin>>N>>M)
+	{
+		int d[101][101];
+		for(int i=0;i<101;i++)
+			for(int j=0;j<101;j++)
+				if(i==j)d[i][j]=0;
+				else d[i][j]=INFI;
+				bool isTrue=true;
+
+				for(int i=0;i<M;i++)
+				{
+					int A,B;
+					cin>>A>>B;
+					d[A][B]=d[B][A]=1;
+				}
+
+				//floyd
+				for(int k=0;k<N;k++)
+					for (int i=0;i<N;i++)
+						for(int j=0;j<N;j++)
+							if(i!=j&&i!=k&&k!=j)
+							{
+								if(d[i][k]+d[k][j]<d[i][j])//BUG
+									d[i][j]=d[i][k]+d[k][j];
+
+								//if(d[i][j]!=INFI&&d[i][j]>7)isTrue=false;//问题出在这！
+							}
+
+				for(int i=0;i<N;i++)
+					for(int j=0;j<N;j++)
+						if(d[i][j]>7)isTrue=false;
+				if(isTrue)cout<<"Yes"<<endl;
+				else cout<<"No"<<endl;
+// 				//ceui
+// 				for(int i=0;i<N;i++)
+// 				{
+// 					for(int j=0;j<N;j++)
+// 					{
+// 						cout<<d[i][j]<<" ";
+// 					}
+// 					cout<<endl;
+// 				}
+	}
+	//cout<<"Hello world!"<<endl;
+	system("pause");
+	return 0;
+}
